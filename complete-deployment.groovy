@@ -37,7 +37,7 @@ pipeline {
         }
         stage('deploy-to-tomcat-server') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ubu', keyFileVariable: 'id_rsa', usernameVariable: 'tomcat')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ubuntu', keyFileVariable: 'id_rsa', usernameVariable: 'tomcat')]) {
                     sh'''
                     sudo ssh -i ${id_rsa} -T -o StrictHostKeyChecking=no ubuntu@3.17.37.200<<EOF
                     sudo apt update -y

@@ -1,67 +1,50 @@
-
 pipeline {
     agent any
-    environment {
-        name = 'KILLu'
-    }
-    parameters {
-        string(name: 'Pirate' ,defaultValue: 'Luffy' ,description: "SUN GOD NIKA")
-        booleanParam(name: 'Haki' ,defaultValue: true ,description: "")
-        choice(name: 'Islands' ,choices: ['Wano', 'Egghead', 'Elbaf'] ,description: "")
+    tools {
+        maven 'Maven'
     }
     stages {
-        stage('Run Cmds') {
+        stage('code-pulling') {
             steps {
-                sh '''
-                pwd
-                date
-                cal 2024
-                '''
+                git credentialsId: 'ubuntu', url: 'https://github.com/sanjay7917/student-ui.git'
             }
         }
-        stage('Environment') {
-            environment {
-                username = 'SILCO'
-            }
+        stage("test-maven"){
+            steps{
+                sh 'mvn test'
+                sh 'mvn clean package' 
+                // sh 'sudo apt update -y'
+                // sh 'sudo apt install maven -y'
+                // sh 'mvn clean package' 
+            }    
+        }
+        stage('artifact to s3') {
             steps {
-                sh 'echo "${BUILD_ID}"'
-                sh 'echo "${name}"'
-                sh 'echo "${username}"'
-            }
+                withAWS(credentials: 'aws', region: 'us-east-2') {
+                     sh'''
+                     sudo apt update -y
+                     sudo apt install awscli -y
+                     aws s3 ls
+                     aws s3 mb s3://buck12312344 --region us-east-2
+                     sudo mv /home/ubuntu/JENKINHOME/workspace/pull/target/studentapp-2.2-SNAPSHOT.war /tmp/studentapp-2.2-SNAPSHOT${BUILD_ID}.war
+                     aws s3 cp /tmp/studentapp-2.2-SNAPSHOT${BUILD_ID}.war  s3://buck12312344/
+                    '''
+                }
+            }     
         }
-        stage('Parameters') {
-            steps {
-                echo 'Deployinggggggg To Testtttttt'
-                sh 'echo "${name}"'
-                sh 'echo "${Pirate}"'
-                sh 'echo "${Haki}"'
-                sh 'echo "${Islands}"'
-            }
-        }
-        stage('InputFromUser') {
-            input {
-                message "Would U Like To Continue?"
-                ok "YES"
-            }
-            steps {
-                echo 'Input From User'
-            }
-        }
-        stage('Deploy to Prod') {
-            steps {
-                echo 'Deployinggggggg To Proddddddd'
-            }
-        }
-    }
-    post{
-        always{
-            echo 'I WILL ALWAYS RUN'
-        }
-        failure{
-            echo 'FAILURE'
-        }
-        success{
-            echo 'SUCCESS'
-        }
+        // stage("deploy-tomcat"){
+        //     steps{
+        //         withCredentials([sshUserPrivateKey(credentialsId: 'ubuntu', keyFileVariable: 'id_rsa', usernameVariable: 'ubuntu')]) {
+        //             sh'''
+        //             sudo apt update -y
+        //             sudo apt-get install openjdk-11-jre -y
+        //             sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.74/bin/apache-tomcat-9.0.74.tar.gz
+        //             sudo tar -xzvf apache-tomcat-9.0.74.tar.gz -C /opt
+        //             sudo cp studentapp-2.2-SNAPSHOT.war /opt/apache-tomcat-9.0.74/webapps/
+        //             sudo sh /opt/apache-tomcat-9.0.74/bin/startup.sh
+        //             '''
+        //         }
+        //     }    
+        // }
     }
 }
