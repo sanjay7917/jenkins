@@ -1,18 +1,31 @@
 pipeline {
-    agent any
+    agent{
+        label "master"
+    }
     tools {
         maven 'Maven'
     }
     stages {
         stage('code-pulling') {
             steps {
+                slackSend channel: 'prod', message: 'Job Started'
                 git credentialsId: 'ubuntu', url: 'https://github.com/sanjay7917/student-ui.git'
+                slackSend channel: 'prod', message: 'Code Pulled'
             }
         }
         stage("build-maven"){
             steps{
                 sh 'mvn clean package' 
+                slackSend channel: 'prod', message: 'Build Successful'
             }    
+        }
+        stage('sonarqube-integration'){
+            steps{
+                withSonarQubeEnv('sonarqube-9.9') { 
+                    sh "mvn sonar:sonar"
+                    slackSend channel: 'prod', message: 'SonarQube Integrated'
+                }
+            }
         }
         stage('artifact-to-s3') {
             steps {
@@ -25,14 +38,19 @@ pipeline {
                      sudo mv /var/lib/jenkins/workspace/deploy/target/studentapp-2.2-SNAPSHOT.war /tmp/studentapp-2.2-SNAPSHOT${BUILD_ID}.war
                      aws s3 cp /tmp/studentapp-2.2-SNAPSHOT${BUILD_ID}.war  s3://buck12312344/
                     '''
+                    slackSend channel: 'prod', message: 'Artifact Stored in AWS S3'
                 }
             }     
         }
         stage('deploy-to-tomcat-server') {
+            input {
+                message "Should we continue?"
+                ok "Yes"
+            }
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ubuntu', keyFileVariable: 'id_rsa', usernameVariable: 'tomcat')]) {
                     sh'''
-                    sudo ssh -i ${id_rsa} -T -o StrictHostKeyChecking=no ubuntu@3.128.29.13<<EOF
+                    sudo ssh -i ${id_rsa} -T -o StrictHostKeyChecking=no ubuntu@18.222.250.182<<EOF
                     sudo apt update -y
                     sudo apt install awscli -y
                     sudo apt install openjdk-11-jre -y
@@ -49,8 +67,20 @@ pipeline {
                     sudo cp -rv student.war /opt/apache-tomcat-9.0.74/webapps/
                     sudo sh /opt/apache-tomcat-9.0.74/bin/startup.sh
                     '''
+                    slackSend channel: 'prod', message: 'Application Successfully Deployed on Prod'
                 }
             }
+        }
+    }
+    post{
+        always{
+            echo "Test Pipeline"
+        }
+        success{
+            slackSend channel: 'prod', message: 'Pipeline Executed Successfully'
+        }
+        failure{
+            slackSend channel: 'prod', message: 'Pipeline Failed to Execute'
         }
     }
 }
