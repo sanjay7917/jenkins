@@ -1,0 +1,23 @@
+                // sh 'sudo apt update -y'
+                // sh 'sudo apt install maven -y'
+        // stage('artifact-to-s3') {
+        //     steps {
+        //         withAWS(credentials: 'aws', region: 'us-east-2') {
+        //             sh'''
+        //             sudo apt update -y
+        //             sudo apt install awscli -y
+        //             aws s3 ls
+        //             sudo mv /var/lib/jenkins/workspace/rum/target/studentapp-2.2-SNAPSHOT.war /tmp/studentapp-2.2-SNAPSHOT${BUILD_ID}.war
+        //             aws s3 cp /tmp/studentapp-2.2-SNAPSHOT${BUILD_ID}.war  s3://buck12312344/
+        //             aws s3 cp s3://buck12312344/studentapp-2.2-SNAPSHOT${BUILD_ID}.war .
+        //             curl -O https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.74/bin/apache-tomcat-9.0.74.tar.gz
+        //             sudo tar -xzvf apache-tomcat-9.0.74.tar.gz -C /opt/
+        //             sudo chmod 777 /opt/apache-tomcat-9.0.74/*  && sudo chown ubuntu: /opt/apache-tomcat-9.0.74/*
+        //             sudo cp -rv studentapp-2.2-SNAPSHOT${BUILD_ID}.war studentapp-2.2-SNAPSHOT.war
+        //             sudo cp -rv studentapp-2.2-SNAPSHOT.war /opt/apache-tomcat-9.0.74/webapps/
+        //             sudo sh /opt/apache-tomcat-9.0.74/bin/startup.sh
+        //             '''
+        //         }
+        //     }     
+        // }
+                // sudo chmod 777 /opt/apache-tomcat-9.0.74/*  && sudo chown ubuntu: /opt/apache-tomcat-9.0.74/*
