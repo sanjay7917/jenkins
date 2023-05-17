@@ -73,7 +73,8 @@ pipeline{
                 }
                 success{
                     echo "Deploy To Prod Job"
-                    slackSend channel: 'testing', message: 'Success'
+                    slackSend channel
+                    : 'testing', message: 'Success'
                 }
                 failure{
                     echo "Deploy To Prod Job"
