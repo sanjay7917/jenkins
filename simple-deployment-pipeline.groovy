@@ -43,6 +43,10 @@ pipeline {
             }     
         }
         stage('deploy-to-tomcat-server') {
+        //If You Dont Want to take SSH then create jenkins node and run this stage on that NODE Using agent.
+            // agent {
+            //     label 'tomcat-node'
+            // }
             input {
                 message "Should we continue?"
                 ok "Yes"
