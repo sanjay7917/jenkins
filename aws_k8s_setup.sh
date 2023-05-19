@@ -7,10 +7,10 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 unzip awscliv2.zip
 ./aws/install
 
-#AWS CONFIURATION
-aws configure set aws_access_key_id AKIAVTTFCSQQMYIZP6N6
-aws configure set aws_secret_access_key 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
-aws configure set default.region us-east-2
+# #AWS CONFIURATION
+# aws configure set aws_access_key_id <Access_Key>
+# aws configure set aws_secret_access_key <Secret_Access_Key>
+# aws configure set default.region us-east-2
 
 #EKSCTL INSTALLATION
 #FOR Latest VERSION OF KEUBECTL

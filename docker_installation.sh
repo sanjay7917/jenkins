@@ -13,5 +13,6 @@ echo \
 sudo apt-get update -y
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 # Verify that the Docker Engine installation is successful by running the hello-world image
-sudo docker run hello-world
-  
+# sudo docker run hello-world
+# sudo usermod -aG docker jenkins #(Reboot Required)
+# sudo chmod 666 /var/run/docker.sock
