@@ -112,6 +112,23 @@ pipeline {
                 }
             }
         }
+        // stage('Deploy App on k8s') {
+        //     steps {    
+        //         withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+        //             sh 'sudo ssh -i ${id_rsa} -T -o StrictHostKeyChecking=no ubuntu@13.59.197.251<<EOF'
+        //         }
+        //             sshagent(['ubuntu']) {
+        //                 sh "scp -o StrictHostKeyChecking=no deploysvc.yml ubuntu@18.218.170.237:/home/ubuntu"
+        //                 script {
+        //                     try{
+        //                         sh "ssh ubuntu@18.218.170.237 kubectl apply -f ."
+        //                     }catch(error){
+        //                         sh "ssh ubuntu@18.218.170.237 kubectl create -f ."
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
 

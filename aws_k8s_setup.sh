@@ -1,6 +1,6 @@
 #!/bin/bash
-apt update -y
-apt install unzip -y && apt install curl -y
+sudo apt update -y
+sudo apt install unzip -y && apt install curl -y && apt install openjdk-11-jre -y 
 
 #AWSCLI INSTALLATION
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -12,7 +12,7 @@ unzip awscliv2.zip
 # aws configure set aws_secret_access_key <Secret_Access_Key>
 # aws configure set default.region us-east-2
 
-#EKSCTL INSTALLATION
+#KUBECTL INSTALLATION
 #FOR Latest VERSION OF KEUBECTL
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl
@@ -37,7 +37,6 @@ sudo mv /tmp/eksctl /usr/local/bin
 # mv student.war /usr/local/tomcat/webapps
 # sh /opt/apache-tomcat-9.0.74/bin/shutdown.sh
 # sh /opt/apache-tomcat-9.0.74/bin/startup.sh
-
 # sed -i 's/8080/8000/g' /usr/local/tomcat/conf/server.xml 
 # sh /usr/local/tomcat/bin/shutdown.sh
 # sh /usr/local/tomcat/bin/startup.sh

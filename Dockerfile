@@ -28,15 +28,18 @@
 # WORKDIR /tmp/k8s_manifest
 # ===============================
 FROM tomcat 
-COPY aws_k8s_setup.sh /tmp
-RUN chmod +x /tmp/aws_k8s_setup.sh
-RUN sh /tmp/aws_k8s_setup.sh
-RUN rm -rvf /tmp/aws_k8s_setup.sh
+# COPY aws_k8s_setup.sh /tmp
+# RUN chmod +x /tmp/aws_k8s_setup.sh
+# RUN sh /tmp/aws_k8s_setup.sh
+# RUN rm -rvf /tmp/aws_k8s_setup.sh
+# RUN aws s3 cp s3://buck12312344/studentapp-2.2-SNAPSHOT.war . 
+# RUN mv studentapp-2.2-SNAPSHOT.war student.war
+# RUN mv student.war /usr/local/tomcat/webapps/
+# ENTRYPOINT ["sh", "/usr/local/tomcat/bin/startup.sh"]
 RUN rm -rvf /usr/local/tomcat/webapps
 RUN mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps
-RUN aws s3 cp s3://buck12312344/studentapp-2.2-SNAPSHOT.war . 
-RUN mv studentapp-2.2-SNAPSHOT.war student.war
-RUN mv student.war /usr/local/tomcat/webapps/
-# ENTRYPOINT ["sh", "/usr/local/tomcat/bin/startup.sh"]
+COPY student.war /usr/local/tomcat/webapps/
+RUN sed -i 's/8080/8000/g' /usr/local/tomcat/conf/server.xml
 CMD /usr/local/tomcat/bin/startup.sh; sleep inf
+
 
