@@ -6,4 +6,5 @@ sudo apt-get install fontconfig openjdk-11-jre -y
 sudo apt-get install jenkins -y
 sudo apt-get install maven -y
 sudo apt-get install git -y
-sudo echo "jenkins ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
+# sudo echo "jenkins ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+

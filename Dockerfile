@@ -19,8 +19,24 @@
 # RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 # RUN mv /tmp/eksctl /usr/local/bin
 # ===============================
-FROM ubuntu
+# FROM ubuntu
+# COPY aws_k8s_setup.sh /tmp
+# RUN chmod +x /tmp/aws_k8s_setup.sh
+# RUN sh /tmp/aws_k8s_setup.sh
+# RUN rm -rvf /tmp/aws_k8s_setup.sh
+# COPY k8s_manifest /tmp
+# WORKDIR /tmp/k8s_manifest
+# ===============================
+FROM tomcat 
 COPY aws_k8s_setup.sh /tmp
 RUN chmod +x /tmp/aws_k8s_setup.sh
 RUN sh /tmp/aws_k8s_setup.sh
-RUN rm -rvf aws_k8s_setup.sh
+RUN rm -rvf /tmp/aws_k8s_setup.sh
+RUN rm -rvf /usr/local/tomcat/webapps
+RUN mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps
+RUN aws s3 cp s3://buck12312344/studentapp-2.2-SNAPSHOT.war . 
+RUN mv studentapp-2.2-SNAPSHOT.war student.war
+RUN mv student.war /usr/local/tomcat/webapps/
+# ENTRYPOINT ["sh", "/usr/local/tomcat/bin/startup.sh"]
+CMD /usr/local/tomcat/bin/startup.sh; sleep inf
+
