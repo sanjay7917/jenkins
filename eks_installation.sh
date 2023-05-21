@@ -2,6 +2,7 @@
 sudo apt update -y
 sudo apt install unzip -y
 sudo apt install curl -y
+sudo apt install openjdk-11-jre -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
@@ -24,7 +25,6 @@ kubectl version --short --client
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
 eksctl version
-eksctl create cluster --name eks-cluster --node-type t2.medium --nodes 1 --region us-east-2
 
 aws sts get-caller-identity
 aws --version
@@ -38,10 +38,37 @@ kubectl version --short --client
 
 
 #jenkins slave 
-adduser jenkins
-mkdir /var/lib/jenkins
-chown jenkins:jenkins /var/lib/jenkins
-
+sudo adduser jenkins
+sudo mkdir /var/lib/jenkins
+sudo chown jenkins:jenkins /var/lib/jenkins
+#create cluster way 1
+eksctl create cluster --name=eksdemo1 \
+                      --region=us-east-2 \
+                      --zones=us-east-2a,us-east-2b \
+                      --without-nodegroup
+eksctl utils associate-iam-oidc-provider \
+    --region us-east-2 \
+    --cluster eksdemo1 \
+    --approve
+eksctl create nodegroup --cluster=eksdemo1 \
+                       --region=us-east-2 \
+                       --name=eksdemo1-ng-public1 \
+                       --node-type=t3.medium \
+                       --nodes=2 \
+                       --nodes-min=2 \
+                       --nodes-max=4 \
+                       --node-volume-size=20 \
+                       --ssh-access \
+                       --ssh-public-key=kube-demo \
+                       --managed \
+                       --asg-access \
+                       --external-dns-access \
+                       --full-ecr-access \
+                       --appmesh-access \
+                       --alb-ingress-access
+eksctl get cluster
+eksctl delete cluster eksdemo1
+#======================
 eksctl create cluster --name demo --region us-east-2 --nodegroup-name nodes --node-type t2.micro --managed --nodes 2
 eksctl get cluster --name demo --region us-east-2
 aws eks update-kubeconfig --name demo --region us-east-2
