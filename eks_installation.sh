@@ -10,25 +10,25 @@ aws configure set aws_access_key_id AKIAVTTFCSQQDB36THT4
 aws configure set aws_secret_access_key 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
 aws configure set default.region us-east-2
 #===================================================
-curl -o aws-iam-authenticator https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator
-chmod +x ./aws-iam-authenticator
-mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$PATH:$HOME/bin
-echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
-aws-iam-authenticator help
-#KUBECTL
-curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.25.7/2023-03-17/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
-kubectl version --short --client
-#EKSCTL
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-sudo mv /tmp/eksctl /usr/local/bin
-eksctl version
+# curl -o aws-iam-authenticator https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator
+# chmod +x ./aws-iam-authenticator
+# mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$PATH:$HOME/bin
+# echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+# aws-iam-authenticator help
+# #KUBECTL
+# curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.25.7/2023-03-17/bin/linux/amd64/kubectl
+# chmod +x ./kubectl
+# mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+# echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+# kubectl version --short --client
+# #EKSCTL
+# curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+# sudo mv /tmp/eksctl /usr/local/bin
+# eksctl version
 
-aws sts get-caller-identity
-aws --version
-aws eks update-kubeconfig --region us-east-2 --name eks-cluster
+# aws sts get-caller-identity
+# aws --version
+# aws eks update-kubeconfig --region us-east-2 --name eks-cluster
 
 #===================================================
 #KUBECTL WAY 2
@@ -73,11 +73,11 @@ eksctl create nodegroup --cluster=eksdemo1 \
                        --appmesh-access \
                        --alb-ingress-access
 eksctl get cluster
-eksctl delete cluster eksdemo1
+# eksctl delete cluster eksdemo1
 #===================================================
-eksctl create cluster --name demo --region us-east-2 --nodegroup-name nodes --node-type t2.medium --managed --nodes 1
-eksctl get cluster --name demo --region us-east-2
-aws eks update-kubeconfig --name demo --region us-east-2
-cat  /home/ubuntu/.kube/config
-kubectl get nodes
-eksctl delete cluster --name demo --region us-east-2
+# eksctl create cluster --name demo --region us-east-2 --nodegroup-name nodes --node-type t2.medium --managed --nodes 1
+# eksctl get cluster --name demo --region us-east-2
+# aws eks update-kubeconfig --name demo --region us-east-2
+# cat  /home/ubuntu/.kube/config
+# kubectl get nodes
+# eksctl delete cluster --name demo --region us-east-2

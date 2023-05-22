@@ -57,6 +57,7 @@
 //         }
 //     }
 // }
+//                  OR
 // EKS Cluster USING SSH AGENT
 pipeline {
     agent any
@@ -112,6 +113,7 @@ pipeline {
                 }
             }
         }
+        //                  OR
         // stage('Deploy App on k8s') {
         //     steps {    
         //         withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
