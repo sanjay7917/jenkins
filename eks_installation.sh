@@ -9,7 +9,7 @@ sudo ./aws/install
 aws configure set aws_access_key_id AKIAVTTFCSQQDB36THT4
 aws configure set aws_secret_access_key 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
 aws configure set default.region us-east-2
-
+#===================================================
 curl -o aws-iam-authenticator https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator
 chmod +x ./aws-iam-authenticator
 mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$PATH:$HOME/bin
@@ -30,17 +30,23 @@ aws sts get-caller-identity
 aws --version
 aws eks update-kubeconfig --region us-east-2 --name eks-cluster
 
+#===================================================
 #KUBECTL WAY 2
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 kubectl version --short --client
 
-
+#EKSCTL WAY 2
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+#===================================================
 #jenkins slave 
-sudo adduser jenkins
 sudo mkdir /var/lib/jenkins
+sudo adduser jenkins --home /var/lib/jenkins
 sudo chown jenkins:jenkins /var/lib/jenkins
+#===================================================
 #create cluster way 1
 eksctl create cluster --name=eksdemo1 \
                       --region=us-east-2 \
@@ -68,10 +74,10 @@ eksctl create nodegroup --cluster=eksdemo1 \
                        --alb-ingress-access
 eksctl get cluster
 eksctl delete cluster eksdemo1
-#======================
-eksctl create cluster --name demo --region us-east-2 --nodegroup-name nodes --node-type t2.micro --managed --nodes 2
+#===================================================
+eksctl create cluster --name demo --region us-east-2 --nodegroup-name nodes --node-type t2.medium --managed --nodes 1
 eksctl get cluster --name demo --region us-east-2
 aws eks update-kubeconfig --name demo --region us-east-2
-cat  /var/lib/jenkins/.kube/config
+cat  /home/ubuntu/.kube/config
 kubectl get nodes
 eksctl delete cluster --name demo --region us-east-2
