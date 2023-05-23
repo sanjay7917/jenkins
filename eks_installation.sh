@@ -6,8 +6,8 @@ sudo apt install openjdk-11-jre -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
-aws configure set aws_access_key_id AKIAVTTFCSQQDB36THT4
-aws configure set aws_secret_access_key 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
+aws configure set aws_access_key_id <Access_Key>
+aws configure set aws_secret_access_key <Secret_Access_Key>
 aws configure set default.region us-east-2
 #===================================================
 # curl -o aws-iam-authenticator https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator
